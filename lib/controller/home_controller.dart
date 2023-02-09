@@ -9,14 +9,13 @@ class HomeController extends GetxController {
     final data = await WeatherServices().getWetherApiServices(place: '');
 
     if (data != null) {
-      wetherData.value = data; 
+      wetherData.value = data;
     }
   }
 
-
   @override
   void onInit() {
-   getAllWeatherData();
+    getAllWeatherData();
     super.onInit();
   }
 }
