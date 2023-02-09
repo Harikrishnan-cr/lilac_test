@@ -3,27 +3,27 @@ import 'condition.dart';
 class Current {
 	int? lastUpdatedEpoch;
 	String? lastUpdated;
-	int? tempC;
+	num? tempC;
 	double? tempF;
 	int? isDay;
 	Condition? condition;
 	double? windMph;
 	double? windKph;
-	int? windDegree;
+	num? windDegree;
 	String? windDir;
-	int? pressureMb;
+	num? pressureMb;
 	double? pressureIn;
-	int? precipMm;
-	int? precipIn;
-	int? humidity;
-	int? cloud;
+	num? precipMm;
+	num? precipIn;
+	num? humidity;
+	num? cloud;
 	double? feelslikeC;
 	double? feelslikeF;
-	int? visKm;
-	int? visMiles;
-	int? uv;
+	num? visKm;
+	num? visMiles;
+	num? uv;
 	double? gustMph;
-	int? gustKph;
+	num? gustKph;
 
 	Current({
 		this.lastUpdatedEpoch, 
@@ -54,7 +54,7 @@ class Current {
 	factory Current.fromJson(Map<String, dynamic> json) => Current(
 				lastUpdatedEpoch: json['last_updated_epoch'] as int?,
 				lastUpdated: json['last_updated'] as String?,
-				tempC: json['temp_c'] as int?,
+				tempC: json['temp_c'] as num?,
 				tempF: (json['temp_f'] as num?)?.toDouble(),
 				isDay: json['is_day'] as int?,
 				condition: json['condition'] == null
@@ -62,21 +62,21 @@ class Current {
 						: Condition.fromJson(json['condition'] as Map<String, dynamic>),
 				windMph: (json['wind_mph'] as num?)?.toDouble(),
 				windKph: (json['wind_kph'] as num?)?.toDouble(),
-				windDegree: json['wind_degree'] as int?,
+				windDegree: json['wind_degree'] as num?,
 				windDir: json['wind_dir'] as String?,
-				pressureMb: json['pressure_mb'] as int?,
+        cloud: json['cloud'] as num?,
+				pressureMb: json['pressure_mb'] as num?,
 				pressureIn: (json['pressure_in'] as num?)?.toDouble(),
-				precipMm: json['precip_mm'] as int?,
-				precipIn: json['precip_in'] as int?,
-				humidity: json['humidity'] as int?,
-				cloud: json['cloud'] as int?,
+				precipMm: json['precip_mm'] as num?,
+				precipIn: json['precip_in'] as num?,
+				humidity: json['humidity'] as num?,
 				feelslikeC: (json['feelslike_c'] as num?)?.toDouble(),
 				feelslikeF: (json['feelslike_f'] as num?)?.toDouble(),
-				visKm: json['vis_km'] as int?,
-				visMiles: json['vis_miles'] as int?,
-				uv: json['uv'] as int?,
+				visKm: json['vis_km'] as num?,
+				visMiles: json['vis_miles'] as num?,
+				uv: json['uv'] as num?,
 				gustMph: (json['gust_mph'] as num?)?.toDouble(),
-				gustKph: json['gust_kph'] as int?,
+				gustKph: json['gust_kph'] as num?,
 			);
 
 	Map<String, dynamic> toJson() => {
