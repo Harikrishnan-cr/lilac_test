@@ -8,7 +8,7 @@ class WeatherServices {
   Future<WetherModelClass?> getWetherApiServices(
       {required String place}) async {
     final responce =
-        await http.get(Uri.parse(ConstWetherApi.constWeatherUri('London')));
+        await http.get(Uri.parse(ConstWetherApi.constWeatherUri('chennai'))); 
     try {
       if (responce.statusCode == 200) {
         final data = jsonDecode(responce.body);
@@ -20,6 +20,7 @@ class WeatherServices {
     } catch (e) {
       log('eeeeeeeeeeeee error'); 
       log(e.toString());
+        return null;
     }
     return null;
   }

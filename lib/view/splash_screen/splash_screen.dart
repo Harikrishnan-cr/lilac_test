@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -10,6 +12,9 @@ class SplashSceen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final data = DateTime.now();
+
+    log(data.day.toString());   
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(canvasColor: CommonAppColor.canvasColor), 
