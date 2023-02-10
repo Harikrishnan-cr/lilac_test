@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lilac_test/controller/home_controller.dart';
 import 'package:lilac_test/core/color/colors.dart';
-import 'package:lilac_test/core/fonts/fonts.dart';
 import 'package:lilac_test/core/size/size.dart';
 import 'package:lilac_test/core/style/text_style/text_style.dart';
 
@@ -26,7 +25,7 @@ GestureDetector(
   onTap: () {
     Get.back();  
   },
-  child: Icon(Icons.close)) ,
+  child: const Icon(Icons.close)),
  kWidth20,  
         ],
       ),

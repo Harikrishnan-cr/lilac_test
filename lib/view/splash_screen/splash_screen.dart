@@ -8,26 +8,23 @@ import 'package:intl/intl.dart';
 import 'package:lilac_test/controller/loacation_controller.dart';
 import 'package:lilac_test/controller/network_connection_controller.dart';
 import 'package:lilac_test/core/color/colors.dart';
+import 'package:lilac_test/core/style/text_style/text_style.dart';
 import 'package:lilac_test/view/home_screen/home_screen.dart';
 
 class SplashSceen extends StatelessWidget {
-   SplashSceen({super.key}); 
+  SplashSceen({super.key});
 
- final locationController = Get.put(NetWorkConectionController());   
+  final locationController = Get.put(NetWorkConectionController());
   @override
-  Widget build(BuildContext context) {   
-  
+  Widget build(BuildContext context) {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(canvasColor: CommonAppColor.canvasColor), 
+        theme: ThemeData(canvasColor: CommonAppColor.canvasColor),
         home: AnimatedSplashScreen(
             duration: 3000,
-            splash: Icons.home,
+            splash: const Center(child: Text('Lilac Flutter Assignment',style: CommonTextStyle.splashSceenTextStyle,)),
             nextScreen: HomeScreen(),
             splashTransition: SplashTransition.fadeTransition,
-            backgroundColor: Colors.blue));
+            backgroundColor: Colors.deepPurple));
   }
 }
-
-
-

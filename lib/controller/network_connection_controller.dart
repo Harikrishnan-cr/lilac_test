@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:lilac_test/controller/home_controller.dart';
 import 'package:lilac_test/controller/loacation_controller.dart';
 
