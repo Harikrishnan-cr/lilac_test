@@ -1,28 +1,38 @@
-import 'dart:developer';
 
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lilac_test/controller/home_controller.dart';
+import 'package:lilac_test/core/color/colors.dart';
 import 'package:lilac_test/core/fonts/fonts.dart';
 import 'package:lilac_test/core/size/size.dart';
 import 'package:lilac_test/core/style/gradiant_style.dart';
+import 'package:lilac_test/core/style/text_style/text_style.dart';
+import 'package:lilac_test/model/weather_hive_model/weather_hive_model.dart';
+import 'package:lilac_test/view/search_screen/search_screen.dart';
+
+
+
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final homeController = Get.put(HomeController());
+
+  Uint8List? dataImages;
   @override
   Widget build(BuildContext context) {
+
     homeController.getAllWeatheDataFromDB();
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Container(
-        child: Obx(() {
-          final weatherData = homeController.weatherData.value;
-          
-          return !homeController.isLoading.value
-              ? Column(
+      body: Obx(() {
+        final weatherData = homeController.weatherData.value;    
+        return !homeController.isLoading.value     
+            ? SingleChildScrollView( 
+              child: Column(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(top: height * 0.03),
@@ -37,83 +47,17 @@ class HomeScreen extends StatelessWidget {
                         child: SafeArea(
                           child: Column(
                             children: [ 
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                      alignment: Alignment.centerLeft,
-                                      width: width * 0.7,
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                              149, 255, 255, 255),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Icon(Icons.search),
-                                          ),
-                                          kWidth10,
-                                          Text('Search other data')
-                                        ],
-                                      )),
-                                  Icon(
-                                    Icons.location_city,
-                                  ),
-                                ],
-                              ),
-
+                              SearchSection(width: width),
+            
                               constHeight(height, 0.1),
-
-                              Column(
-                                children: [
-                                  RichText(
-                                      text: TextSpan(
-                                          style: TextStyle(
-                                              fontFamily: mavenPro,
-                                              color:
-                                                  Colors.white.withOpacity(0.9),
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold),
-                                          children: [
-                                        TextSpan(
-                                            text:
-                                                '${weatherData.name}, '),
-                                        TextSpan(text: weatherData.region),
-                                      ])),
-                                  constHeight(height, 0.01),
-                                  RichText(
-                                      text: TextSpan(
-                                          style: TextStyle(
-                                              fontFamily: mavenPro,
-                                              color:
-                                                  Colors.white.withOpacity(0.9),
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                          children: [
-                                        TextSpan(text: 'Monday, '),
-                                        TextSpan(text: '03 March'),
-                                      ])),
-                                ],
-                              ),
-
+            
+                              LocationAndDateSection(weatherData: weatherData, height: height),
+             
                               constHeight(height, 0.03),
-                              Container(
-                                width: width * 0.4,
-                                height: height * 0.1,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            'https:${weatherData.icon}'), 
-                                        fit: BoxFit.cover)),
-                              ),
-
+                              MainImageSectionTile(width: width, height: height, weatherData: weatherData),
+            
                               constHeight(height, 0.03),
-
+            
                               Text(
                                 weatherData.text.toString(),  
                                 style: TextStyle(
@@ -201,17 +145,190 @@ class HomeScreen extends StatelessWidget {
                                   ),
                             ],
                           )
-                        ],
+                        ], 
                       ),
                     )
                   ],
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                );
-        }),
-      ),
+                ),
+            )
+            : Center(
+
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center, 
+                  children: [
+                    weatherData.name != null ? const Text('Loading.....',style: CommonTextStyle.noInterntetTextStyle,) : const Text('Check your internet connection',style: CommonTextStyle.noInterntetTextStyle,), 
+                    kheight10, 
+                    CircularProgressIndicator(
+                      color: CommonAppColor.gradiantColorTwo, 
+                    ),
+            
+                    
+                  ],
+                ),
+              );
+      }),  
+
+   
+    ); 
+  }  
+}
+
+class MainImageSectionTile extends StatelessWidget {
+  const MainImageSectionTile({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.weatherData,
+  }) : super(key: key);
+
+  final double width;
+  final double height;
+  final WeatherHiveModel weatherData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width * 0.4,
+      height: height * 0.1,
+       decoration: BoxDecoration(
+          image: DecorationImage(
+              image: MemoryImage(weatherData.imagesData!
+                 ), 
+              fit: BoxFit.cover)),
     );
+  }
+}
+
+class LocationAndDateSection extends StatelessWidget {
+  const LocationAndDateSection({
+    Key? key,
+    required this.weatherData,
+    required this.height,
+  }) : super(key: key);
+
+  final WeatherHiveModel weatherData;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        LoactionTileWidget(weatherData: weatherData),
+        constHeight(height, 0.01),
+        CurrentDateTileWidget(weatherData: weatherData),
+      ],
+    );
+  }
+}
+
+class CurrentDateTileWidget extends StatelessWidget {
+  const CurrentDateTileWidget({
+    Key? key,
+    required this.weatherData,
+  }) : super(key: key);
+
+  final WeatherHiveModel weatherData;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+        text: TextSpan(
+            style: TextStyle(
+                fontFamily: mavenPro,
+                color:
+                    Colors.white.withOpacity(0.9),
+                fontSize: 15,
+                fontWeight: FontWeight.w500),
+            children: [
+          TextSpan(text: weatherData.currentDate),
+      
+        ]));
+  }
+}
+
+class LoactionTileWidget extends StatelessWidget {
+  const LoactionTileWidget({
+    Key? key,
+    required this.weatherData,
+  }) : super(key: key);
+
+  final WeatherHiveModel weatherData;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+        text: TextSpan(
+            style: TextStyle(
+                fontFamily: mavenPro,
+                color:
+                    Colors.white.withOpacity(0.9),
+                fontSize: 23,
+                fontWeight: FontWeight.bold),
+            children: [
+          TextSpan(
+              text:
+                  '${weatherData.name}, '),
+          TextSpan(text: weatherData.region),
+        ]));
+  }
+}
+
+class SearchSection extends StatelessWidget {
+  const SearchSection({
+    Key? key,
+    required this.width,
+  }) : super(key: key);
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceEvenly,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Get.to(()=>SearchScreen());
+          },
+          child: SearchTileWidget(width: width)),
+        const Icon( 
+          Icons.location_city,
+        ),
+      ],
+    );
+  }
+}
+
+class SearchTileWidget extends StatelessWidget {
+  const SearchTileWidget({
+    Key? key,
+    required this.width,
+  }) : super(key: key);
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.centerLeft,
+        width: width * 0.7,
+        height: 45,
+        decoration: BoxDecoration(
+            color: CommonAppColor.searchTileColor,
+            borderRadius:
+                BorderRadius.circular(20)),
+        child: Row(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 10),
+              child: Icon(Icons.search),
+            ),
+            kWidth10,
+            Text('Search weather info')
+          ],
+        ));
   }
 }
 

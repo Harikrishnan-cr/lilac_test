@@ -9,12 +9,12 @@ class WeatherServices {
   Future<WetherModelClass?> getWetherApiServices(
       {required String place}) async {
     final responce =
-        await http.get(Uri.parse(ConstWetherApi.constWeatherUri('kozikode')));
+        await http.get(Uri.parse(ConstWetherApi.constWeatherUri(place))); 
     try {
       if (responce.statusCode == 200) {
         final data = jsonDecode(responce.body);
         log(data.toString());
-        return WetherModelClass.fromJson(data);
+        return WetherModelClass.fromJson(data); 
       } else {
         log('not gettibg');
       }

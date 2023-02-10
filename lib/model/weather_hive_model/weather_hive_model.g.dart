@@ -22,16 +22,18 @@ class WeatherHiveModelAdapter extends TypeAdapter<WeatherHiveModel> {
       tempC: fields[10] as num?,
       tempF: fields[11] as double?,
       isDay: fields[12] as int?,
+      currentDate: fields[35] as String?,
+      cloud: fields[23] as num?,
       windMph: fields[13] as double?,
       windKph: fields[14] as double?,
       windDegree: fields[15] as num?,
       windDir: fields[16] as String?,
+      imagesData: fields[34] as Uint8List?,
       pressureMb: fields[17] as num?,
       pressureIn: fields[18] as double?,
       precipMm: fields[19] as num?,
       precipIn: fields[20] as num?,
       humidity: fields[22] as num?,
-      cloud: fields[23] as num?,
       feelslikeC: fields[24] as double?,
       feelslikeF: fields[25] as double?,
       visKm: fields[26] as num?,
@@ -56,7 +58,7 @@ class WeatherHiveModelAdapter extends TypeAdapter<WeatherHiveModel> {
   @override
   void write(BinaryWriter writer, WeatherHiveModel obj) {
     writer
-      ..writeByte(33)
+      ..writeByte(35)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -122,7 +124,11 @@ class WeatherHiveModelAdapter extends TypeAdapter<WeatherHiveModel> {
       ..writeByte(32)
       ..write(obj.icon)
       ..writeByte(33)
-      ..write(obj.code);
+      ..write(obj.code)
+      ..writeByte(34)
+      ..write(obj.imagesData)
+      ..writeByte(35)
+      ..write(obj.currentDate);
   }
 
   @override

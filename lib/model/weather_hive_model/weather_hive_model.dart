@@ -1,5 +1,6 @@
+import 'dart:typed_data';
 import 'package:hive_flutter/adapters.dart';
-part 'weather_hive_model.g.dart'; 
+part 'weather_hive_model.g.dart';
 
 @HiveType(typeId: 1)
 class WeatherHiveModel {
@@ -7,7 +8,7 @@ class WeatherHiveModel {
   String? name;
   @HiveField(1)
   String? region;
-  @HiveField(2)
+  @HiveField(2) 
   String? country;
   @HiveField(3)
   double? lat;
@@ -69,6 +70,10 @@ class WeatherHiveModel {
   String? icon;
   @HiveField(33)
   int? code;
+  @HiveField(34)
+  Uint8List? imagesData;
+  @HiveField(35)
+  String? currentDate;
 
   WeatherHiveModel(
       {this.lastUpdatedEpoch,
@@ -76,21 +81,23 @@ class WeatherHiveModel {
       this.tempC,
       this.tempF,
       this.isDay,
+      this.currentDate,
+      this.cloud,
       this.windMph,
       this.windKph,
       this.windDegree,
       this.windDir,
+      this.imagesData,
       this.pressureMb,
       this.pressureIn,
       this.precipMm,
       this.precipIn,
       this.humidity,
-      this.cloud,
       this.feelslikeC,
       this.feelslikeF,
       this.visKm,
       this.visMiles,
-      this.uv,
+      this.uv, 
       this.gustMph,
       this.gustKph,
       this.name,
