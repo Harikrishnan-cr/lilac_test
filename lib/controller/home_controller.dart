@@ -61,18 +61,15 @@ final searchInputController = TextEditingController();
   }
 
 
+@override
+  void onClose() {
+    super.onClose();
+    searchInputController.dispose();  
+  }
 
 
-  // @override
-  // void onInit() {
 
-  //   super.onInit();
-  // }
-
-//----------search -------------------
-
-  void searchData(String searchData) {
- 
+  void searchData(String searchData) {  
     mapData = weatherMapData.entries
         .where((element) =>
             element.key.toLowerCase().contains(searchData.toLowerCase()))

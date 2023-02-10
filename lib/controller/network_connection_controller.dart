@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
@@ -5,11 +6,12 @@ import 'package:lilac_test/controller/home_controller.dart';
 import 'package:lilac_test/controller/loacation_controller.dart';
 
 class NetWorkConectionController extends GetxController {
-  Connectivity _connectivity = Connectivity();
+  final Connectivity _connectivity = Connectivity();
   final homeController = Get.put(HomeController());
   final locationController = Get.put(LocationController());
+  late StreamSubscription streamSubscription;
   void checkRealTimeConnection() {
-    _connectivity.onConnectivityChanged.listen((event) {
+    streamSubscription = _connectivity.onConnectivityChanged.listen((event) {
       if (event == ConnectivityResult.mobile) {
         locationController.getData();
       } else if (event == ConnectivityResult.wifi) {
@@ -18,6 +20,13 @@ class NetWorkConectionController extends GetxController {
         homeController.getAllWeatheDataFromDB();
       }
     });
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+
+    streamSubscription.cancel();
   }
 
   @override

@@ -1,11 +1,6 @@
-import 'dart:developer';
-
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:lilac_test/controller/loacation_controller.dart';
 import 'package:lilac_test/controller/network_connection_controller.dart';
 import 'package:lilac_test/core/color/colors.dart';
 import 'package:lilac_test/core/style/text_style/text_style.dart';
