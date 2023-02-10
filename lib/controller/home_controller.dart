@@ -6,8 +6,8 @@ import 'package:lilac_test/model/weather_hive_model/weather_hive_model.dart';
 import 'package:lilac_test/services/weather_services.dart';
 
 class HomeController extends GetxController {
-  Rx<WeatherHiveModel> wetherData = WeatherHiveModel().obs;
-
+  Rx<WeatherHiveModel> weatherData = WeatherHiveModel().obs;
+  RxMap<String, dynamic> weatherMapData = <String, dynamic>{}.obs;
   final isLoading = true.obs;
 
   void getAllWeatherData() async {
@@ -23,12 +23,58 @@ class HomeController extends GetxController {
           locationtData: locationtData,
           conditionData: conditionData);
       addWeatherDataToDB(modelData);
-      //wetherData.value = data;
     } else {
       log('unhadlesss');
       getAllWeatheDataFromDB();
     }
   }
+
+  Future<void> addWeatherDataToDB(data) async {
+    final weatherDB = await Hive.openBox<WeatherHiveModel>('weathe_db');
+    weatherDB.put('key', data);
+  }
+
+  void getAllWeatheDataFromDB() async {
+    isLoading.value = true;
+    final weatherDB = await Hive.openBox<WeatherHiveModel>('weathe_db');
+
+    final datas = weatherDB.get('key');
+
+    if (datas != null) {
+      weatherData.value = datas;
+      addWeatherDataToMap(datas);
+      isLoading.value = false;
+    } else {
+      return;
+    }
+  }
+
+  @override
+  void onInit() {
+    getAllWeatherData();
+
+    super.onInit();
+  }
+
+//----------search -------------------
+
+  List<MapEntry<String, dynamic>> searchData(String searchData) {
+    return weatherMapData.entries
+        .where((element) =>
+            element.key.toLowerCase().contains(searchData.toLowerCase()))
+        .toList();
+  }
+
+  void addWeatherDataToMap(WeatherHiveModel datas) { 
+    weatherMapData['Humidity'] = datas.name;
+    weatherMapData['windspeed Kilometers per Hour'] = datas.region;
+    weatherMapData['windspeed miles per hour'] = datas.name;
+    weatherMapData['wind degree'] = datas.name;
+    weatherMapData['uv'] = datas.name;
+    weatherMapData['pressure'] = datas.name;
+  }
+
+  //------------add to hive model
 
   WeatherHiveModel hiveModel(
       {required currentData, required locationtData, required conditionData}) {
@@ -56,31 +102,5 @@ class HomeController extends GetxController {
         tempF: currentData.tempF,
         uv: currentData.uv,
         cloud: currentData.cloud);
-  }
-
-  Future<void> addWeatherDataToDB(data) async {
-    final weatherDB = await Hive.openBox<WeatherHiveModel>('weathe_db');
-    weatherDB.put('key', data);
-  }
-
-  void getAllWeatheDataFromDB() async {
-    isLoading.value = true;
-    final weatherDB = await Hive.openBox<WeatherHiveModel>('weathe_db');
-
-    final datas = weatherDB.get('key');
-
-    if (datas != null) {
-      wetherData.value = datas;
-      isLoading.value = false;
-    } else {
-      return;
-    }
-  }
-
-  @override
-  void onInit() {
-    getAllWeatherData();
-
-    super.onInit();
   }
 }
